@@ -31,9 +31,9 @@ router.get('/', function(req, res, next) {
 
 
 //Get Single todo
-router.get('/:id', function(req, res, next){
+router.get('/:id', (req, res, next) => {
   collection.findOne(
-    {_id: req.params.id}, function(err,todos){
+    {_id: require('mongodb').ObjectID(req.params.id)}, function(err,todos){
     if(err){
       res.send(err);
     } else {
@@ -61,4 +61,15 @@ router.post('/', function(req, res, next) {
 
     }
 });
+
+router.delete('/:id', (req, res, next) => {
+  collection.remove(
+    {_id: require('mongodb').ObjectID(req.params.id)}, function(err,result){
+    if(err){
+      res.send(err);
+    } else {
+      res.json(result);
+    }
+  });
+})
 module.exports = router;
