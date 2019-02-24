@@ -18,6 +18,7 @@ MongoClient.connect(uri, function(err, client) {
    console.log("connected");
 });
 
+//Get todo list
 router.get('/', function(req, res, next) {
     if(!collection){
         res.send("Connection not established");
@@ -27,6 +28,21 @@ router.get('/', function(req, res, next) {
        var cursor = collection.find();
        cursor.pipe(JSONStream.stringify()).pipe(res.type('json'));
 });
+
+
+//Get Single todo
+router.get('/:id', function(req, res, next){
+  collection.findOne(
+    {_id: req.params.id}, function(err,todos){
+    if(err){
+      res.send(err);
+    } else {
+      res.json(todos);
+    }
+  });
+})
+
+
 
 router.post('/', function(req, res, next) {
     if(!collection){
